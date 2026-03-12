@@ -1,82 +1,52 @@
 from fastapi import FastAPI, UploadFile, File, Form
 import subprocess
-import pandas as pd
 
 app = FastAPI()
+
 
 @app.get("/")
 def home():
     return {"message": "LLM Document Extraction API Running"}
 
-from typing import Optional
+
+# -------- DOCUMENT EXTRACTION --------
 @app.post("/extract")
-
-
 async def extract_document(
     file: UploadFile = File(...),
-    config: Optional[str] = Form(None),
-    prompt: Optional[str] = Form(None)
+    prompt: str = Form(...)
 ):
 
     temp_file = f"temp_{file.filename}"
 
+    # Save uploaded file
     with open(temp_file, "wb") as f:
         f.write(await file.read())
 
-    if config:
-        subprocess.run([
-            "python3",
-            "benchmark.py",
-            "--input",
-            temp_file,
-            "--config",
-            config
-        ])
-
-    elif prompt:
-        subprocess.run([
-            "python3",
-            "benchmark.py",
-            "--input",
-            temp_file,
-            "--prompt",
-            prompt
-        ])
-
-    else:
-        return {"error": "Provide either config or prompt"}
+    # Run benchmark script
+    subprocess.run([
+        "python3",
+        "benchmark.py",
+        "--input",
+        temp_file,
+        "--prompt",
+        prompt
+    ])
 
     return {
-         "status": "Benchmark completed"
+        "status": "Benchmark completed"
     }
 
 
-from typing import Optional
-
+# -------- ACCURACY CALCULATION --------
 @app.post("/accuracy")
-def calculate_accuracy(
-    config: Optional[str] = Form(None),
-    prompt: Optional[str] = Form(None)
-):
+def calculate_accuracy(prompt: str = Form(...)):
 
-    if config:
-        subprocess.run([
-            "python3",
-            "accuracy.py",
-            "--config",
-            config
-        ])
-
-    elif prompt:
-        subprocess.run([
-            "python3",
-            "accuracy.py",
-            "--prompt",
-            prompt
-        ])
-
-    else:
-        return {"error": "Provide config or prompt"}
+    subprocess.run([
+        "python3",
+        "accuracy.py",
+        "--prompt",
+        prompt
+    ])
 
     return {
         "status": "Accuracy calculated",
