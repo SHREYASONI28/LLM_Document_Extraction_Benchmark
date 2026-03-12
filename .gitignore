@@ -40,3 +40,19 @@ temp_*
 build/
 dist/
 *.egg-info/
+# Excel output files
+
+*.xlsx
+
+# Benchmark output
+
+benchmark_output*
+benchmark_accuracy*
+
+# Test documents
+
+documents/
+
+# Windows metadata files
+
+*:Zone.Identifier
