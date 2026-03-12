@@ -31,45 +31,32 @@ parser.add_argument(
     required=True,
     help="PDF,TXT , DOCX or XLSX file path OR comma separated list of files"
 )
-parser.add_argument(
-    "--config",
-    required=False,
-    help="Path to config JSON file"
-)
 
 parser.add_argument(
     "--prompt",
-    required=False,
+    required=True,
     help="Direct extraction prompt"
 )
 args = parser.parse_args()
 
 input_files = args.input.split(",")
 
-# ---------------- LOAD CONFIG OR PROMPT ----------------
 
-if args.config:
-    with open(args.config, "r") as f:
-        config = json.load(f)
+# ---------------- LOAD PROMPT ----------------
 
-    FIELDS = config["fields"]
-    USER_PROMPT = config["prompt"]
-elif args.prompt:
-    USER_PROMPT = args.prompt
+if not args.prompt:
+    raise ValueError("Please provide --prompt")
 
-    # Extract fields from prompt automatically
-    match = re.search(r"extract\s+(.*)", args.prompt.lower())
+USER_PROMPT = args.prompt
 
-    if match:
-        FIELDS = [f.strip() for f in match.group(1).split(",")]
-    else:
-        raise ValueError("Prompt must specify fields like: Extract name, email, phone")
+# Extract fields from prompt automatically
+match = re.search(r"extract\s+(.*)", args.prompt.lower())
+
+if match:
+    FIELDS = [f.strip() for f in match.group(1).split(",")]
 else:
-    raise ValueError("Provide either --config or --prompt")
-
+    raise ValueError("Prompt must specify fields like: Extract name, email, phone")
 OUTPUT_FILE = "benchmark_output.xlsx"
-
-
 
 # ---------------- PDF TEXT EXTRACTION ----------------
 def pdf_text(path):
