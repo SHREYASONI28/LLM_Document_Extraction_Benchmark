@@ -1,9 +1,8 @@
 # 🚀 LLM Document Extraction Benchmark
 
+## 📖 Overview
 
-# 📖 Overview
-
-This project provides a **benchmarking framework to evaluate Large Language Models (LLMs)** for **structured information extraction from documents**.
+This project provides a **benchmarking framework for evaluating Large Language Models (LLMs)** on **structured information extraction from documents**.
 
 The system extracts structured information from documents using multiple LLMs and compares their performance based on:
 
@@ -11,7 +10,7 @@ The system extracts structured information from documents using multiple LLMs an
 - 🎯 **Extraction Accuracy**
 - 📊 **Precision, Recall, and F1 Score**
 
-The results are automatically generated in **Excel reports**, making it easy to compare model performance.
+Results are automatically generated in **Excel reports**, making it easy to compare model performance.
 
 The project also includes a **FastAPI API** that allows document extraction and benchmarking through **Swagger UI**.
 
@@ -19,7 +18,7 @@ The project also includes a **FastAPI API** that allows document extraction and 
 
 # 🎯 Project Goal
 
-The goal of this project is to build a **generic and configurable benchmarking framework** for evaluating how effectively **LLMs extract structured information from real-world documents**.
+The goal of this project is to build a **generic benchmarking framework** for evaluating how effectively **LLMs extract structured information from real-world documents**.
 
 This framework helps determine:
 
@@ -27,7 +26,7 @@ This framework helps determine:
 - ⚡ **Fastest model**
 - 📄 **Best model for document information extraction systems**
 
-The system is **configuration-driven**, meaning new extraction tasks can be added without modifying the main code.
+The system supports **prompt-based extraction**, allowing users to define extraction fields dynamically.
 
 
 
@@ -40,7 +39,7 @@ The system benchmarks both **local LLMs (Ollama)** and **cloud LLMs (Azure OpenA
 | **Llama3 (8B)** | Ollama | Open-source LLM by Meta |
 | **Mistral (7B)** | Ollama | Lightweight high-performance LLM |
 | **Qwen2.5 (7B)** | Ollama | Advanced LLM developed by Alibaba |
-| **GPT-4.1** | Azure OpenAI | High accuracy cloud LLM |
+| **GPT-4.1** | Azure OpenAI | High-accuracy cloud LLM |
 | **Azure Llama 3.1 (8B)** | Azure AI | Hosted Llama model on Azure |
 
 Each model processes the **same document and extraction prompt** to ensure fair comparison.
@@ -54,7 +53,7 @@ Document (PDF / TXT / DOCX / XLSX)
             ↓
       Text Extraction
             ↓
-   Prompt + JSON Template
+      Extraction Prompt
             ↓
       LLM Processing
    (Ollama + Azure LLMs)
@@ -69,19 +68,12 @@ Document (PDF / TXT / DOCX / XLSX)
 ```
 
 
+
 # 📂 Project Structure
 
 ```
 LLM_Document_Extraction_Benchmark/
 
-├── config/
-│   ├── invoice_config.json
-│   └── resume_config.json
-│
-├── documents/
-│   ├── invoices/
-│   └── resumes/
-│
 ├── benchmark.py
 ├── accuracy.py
 ├── app.py
@@ -90,11 +82,9 @@ LLM_Document_Extraction_Benchmark/
 ├── benchmark_accuracy.xlsx
 │
 ├── README.md
-├── .env
-└── venv/
+├── .gitignore
+└── .env
 ```
-
-
 
 # 📄 Supported Document Formats
 
@@ -107,68 +97,19 @@ The system supports multiple document formats:
 | **DOCX** | Extracted using python-docx |
 | **XLSX** | Extracted using openpyxl |
 
-
-
-# 📑 Supported Extraction Tasks
-
-The system supports multiple information extraction tasks through **JSON configuration files**.
-
-## Invoice Information Extraction
-
-Example fields:
-
-- Invoice Number  
-- Invoice Date  
-- Customer Name  
-- Customer Email  
-- Total Amount  
-
 ---
 
-## Resume Information Extraction
+# 🧾 Extraction Method
 
-Example fields:
+Information extraction is controlled using **prompts**.
 
-- Name  
-- Email  
-- Phone  
-- Skills  
-- Education  
-- Experience  
-- Location  
-
-
-
-# ⚙️ Configuration System
-
-Extraction prompts and fields are defined using **JSON configuration files**.
-
-Example structure:
+Example prompt:
 
 ```
-config/
-├── invoice_config.json
-└── resume_config.json
+Extract name, email, phone, skills, education, and experience from the document.
 ```
 
-### Example Configuration
-
-```json
-{
-  "prompt": "Extract name, email, phone, skills, education, experience and location from the document.",
-  "fields": [
-    "name",
-    "email",
-    "phone",
-    "skills",
-    "education",
-    "experience",
-    "location"
-  ]
-}
-```
-
-This allows the framework to support **different extraction tasks without modifying the code**.
+Fields are automatically extracted from the prompt and used to generate structured JSON output.
 
 
 
@@ -186,32 +127,7 @@ Example:
 | GPT-4.1 | 4.12 sec |
 | Azure Llama | 1.99 sec |
 
-This helps identify **the fastest model for document processing**.
-
-
-
-# 🎯 Accuracy Evaluation
-
-Predictions are compared with **Ground Truth values** to evaluate model performance.
-
-Metrics calculated:
-
-- Accuracy
-- Precision
-- Recall
-- F1 Score
-
-Matching is calculated using:
-
-```
-difflib.SequenceMatcher
-```
-
-Additional validation includes:
-
-- Text normalization
-- Substring matching
-- Similarity threshold comparison
+This helps identify the **fastest model for document processing**.
 
 
 
@@ -249,11 +165,11 @@ benchmark_accuracy.xlsx
 Example summary:
 
 | Document | Metric | Llama | Mistral | Qwen | GPT-4.1 | Azure-Llama |
-|------|------|------|------|------|------|------|
-| resume_experienced | Accuracy | 85.71 | 71.43 | 100 | 100 | 85.71 |
-| | Precision | 85.71 | 71.43 | 100 | 100 | 85.71 |
-| | Recall | 100 | 100 | 100 | 100 | 100 |
-| | F1 Score | 92.31 | 83.33 | 100 | 100 | 92.31 |
+|---------|--------|------|--------|------|--------|-------------|
+| temp_resume_experienced | Accuracy | 100 | 71.43 | 85.71 | 100 | 85.71 |
+|  | Precision | 100 | 71.43 | 85.71 | 100 | 85.71 |
+|  | Recall | 100 | 100 | 100 | 100 | 100 |
+|  | F1 Score | 100 | 83.33 | 92.31 | 100 | 92.31 |
 
 
 
@@ -289,7 +205,7 @@ http://127.0.0.1:8000/docs
 
 You can test endpoints directly using Swagger UI.
 
-
+---
 
 # 📂 API Endpoints
 
@@ -305,7 +221,7 @@ Example response:
 }
 ```
 
----
+
 
 ## POST /extract
 
@@ -316,13 +232,12 @@ Parameters:
 | Parameter | Description |
 |------|-------------|
 | file | Document file |
-| config | Path to config JSON |
-| prompt | Custom extraction prompt |
+| prompt | Extraction prompt |
 
-Example:
+Example prompt:
 
 ```
-config/resume_config.json
+Extract name, email, phone, skills
 ```
 
 This generates:
@@ -331,7 +246,7 @@ This generates:
 benchmark_output.xlsx
 ```
 
----
+
 
 ## POST /accuracy
 
@@ -341,8 +256,7 @@ Parameters:
 
 | Parameter | Description |
 |------|-------------|
-| config | Config file |
-| prompt | Custom prompt |
+| prompt | Extraction prompt |
 
 Output:
 
@@ -387,12 +301,10 @@ AZURE_API_VERSION_LLAMA=2024-02-15-preview
 
 ## 3️⃣ Run Benchmark
 
-Example:
-
 ```bash
 python benchmark.py \
---input documents/resumes/sample_resume.pdf \
---config config/resume_config.json
+--input sample_resume.pdf \
+--prompt "Extract name, email, phone, skills"
 ```
 
 Output:
@@ -401,12 +313,13 @@ Output:
 benchmark_output.xlsx
 ```
 
----
+
 
 ## 4️⃣ Run Accuracy Evaluation
 
 ```bash
-python accuracy.py --config config/resume_config.json
+python accuracy.py \
+--prompt "Extract name, email, phone, skills"
 ```
 
 Output:
@@ -415,16 +328,25 @@ Output:
 benchmark_accuracy.xlsx
 ```
 
+
+
+# 🌿 Repository Branches
+
+| Branch | Description |
+|------|-------------|
+| **main** | Prompt-based extraction system |
+| **with-config** | Configuration-based extraction version |
+
+
+
 # ✨ Key Features
 
 - Multi-model LLM benchmarking  
 - Supports **PDF, TXT, DOCX, XLSX documents**  
-- Configurable extraction prompts  
-- Multiple document extraction tasks  
+- Prompt-driven extraction  
 - Structured JSON extraction  
 - Execution time benchmarking  
 - Accuracy metrics (Precision, Recall, F1 Score)  
 - Automated Excel report generation  
 - FastAPI API interface  
-- Swagger UI testing  
-
+- Swagger UI testing
