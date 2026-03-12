@@ -1,0 +1,42 @@
+# Environment variables (API keys)
+
+.env
+
+# Python cache
+
+**pycache**/
+*.pyc
+*.pyo
+
+# Virtual environment
+
+venv/
+.venv/
+
+# Logs
+
+*.log
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# VS Code / IDE
+
+.vscode/
+.idea/
+
+# Temporary files
+
+temp_*
+
+# Excel benchmark outputs
+
+~$*.xlsx
+
+# Python build files
+
+build/
+dist/
+*.egg-info/

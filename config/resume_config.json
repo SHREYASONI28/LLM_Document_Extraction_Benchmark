@@ -1,0 +1,4 @@
+{
+  "prompt": "Extract Name, Email, Phone, Skills, Education, Experience, Location from the document.",
+  "fields": ["Name", "Email", "Phone", "Skills", "Education", "Experience", "Location"]
+}
