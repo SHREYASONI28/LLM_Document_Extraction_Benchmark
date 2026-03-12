@@ -11,27 +11,17 @@ OUTPUT_FILE = "benchmark_accuracy.xlsx"
 
 # ---------------- CLI INPUT ----------------
 parser = argparse.ArgumentParser()
-parser.add_argument("--config", required=False)
 parser.add_argument("--prompt", required=False)
 
 args = parser.parse_args()
 
-# ---------------- LOAD CONFIG ----------------
-if args.config:
-    with open(args.config, "r") as f:
-        config = json.load(f)
-    FIELDS = config["fields"]
+# ---------------- LOAD PROMPT ----------------
+match = re.search(r"extract\s+(.*)", args.prompt.lower())
 
-elif args.prompt:
-    match = re.search(r"extract\s+(.*)", args.prompt.lower())
-    if match:
-        FIELDS = [f.strip() for f in match.group(1).split(",")]
-    else:
-        raise ValueError("Prompt must specify fields like: Extract name, email, phone")
-
+if match:
+    FIELDS = [f.strip() for f in match.group(1).split(",")]
 else:
-    raise ValueError("Provide config or prompt")
-
+    raise ValueError("Provide prompt")
 # ---------------- NORMALIZATION ----------------
 def normalize(text):
     text = str(text).lower().strip()
