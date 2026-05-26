@@ -182,7 +182,7 @@ The project provides a **FastAPI API interface** for running document extraction
 # 🚀 Run the API Server
 
 ```bash
-uvicorn app:app --reload
+poetry run uvicorn app:app --reload
 ```
 
 Server runs at:
@@ -278,9 +278,11 @@ Example response:
 # ⚡ Quick Start
 
 ## 1️⃣ Install Dependencies
-
+```
+poetry init -n
+```
 ```bash
-pip install pandas pypdf python-docx openpyxl python-dotenv openai fastapi uvicorn
+poetry add pandas@^2.2.2 pypdf python-docx openpyxl python-dotenv openai fastapi uvicorn python-multipart requests
 ```
 
 ---
@@ -302,7 +304,7 @@ AZURE_API_VERSION_LLAMA=2024-02-15-preview
 ## 3️⃣ Run Benchmark
 
 ```bash
-python benchmark.py \
+poetry run python benchmark.py \
 --input sample_resume.pdf \
 --prompt "Extract name, email, phone, skills"
 ```
@@ -318,7 +320,7 @@ benchmark_output.xlsx
 ## 4️⃣ Run Accuracy Evaluation
 
 ```bash
-python accuracy.py \
+poetry run python accuracy.py \
 --prompt "Extract name, email, phone, skills"
 ```
 
