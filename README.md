@@ -85,7 +85,34 @@ LLM_Document_Extraction_Benchmark/
 ├── .gitignore
 └── .env
 ```
+# ⚙️ Prerequisites
 
+Before running this project, ensure the following are installed and configured:
+
+- Python 3.10+
+- Ollama
+- Required Ollama Models (Llama3, Mistral, Qwen2.5)
+- Azure OpenAI access (for GPT-4.1 and Azure Llama evaluation)
+
+## Install Ollama
+
+Download and install Ollama from:
+
+https://ollama.com/download
+
+## Pull Required Models
+
+```bash
+ollama pull llama3
+ollama pull mistral
+ollama pull qwen2.5
+```
+
+## Verify Ollama is Running
+
+```bash
+ollama serve
+```
 # 📄 Supported Document Formats
 
 The system supports multiple document formats:
